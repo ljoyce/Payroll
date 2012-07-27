@@ -13,7 +13,7 @@ import java.text.*;
 
         
 
-public class Payroll 
+public class Payroll
 {
 
     public static void main(String[] args) 
@@ -23,7 +23,7 @@ public class Payroll
       
        
        Scanner sc = new Scanner (System.in);
-       
+       PayrollCalculations payrollHelper = new PayrollHelper();
        
        
        System.out.print("Enter Employee's name:");
@@ -44,17 +44,21 @@ public class Payroll
        System.out.print("Enter state tax rate (for example: 0.07): ");
        double stateTaxRate = sc.nextDouble();
        
-       double grossPay = (hoursWorked * payRate);
+       double grossPay = payrollHelper.calculcateGrossPay( hoursWorked, payRate );
+               
        
-       double finalFederalRate = federalRate * grossPay;
+       
+       double finalFederalRate = payrollHelper.calculateFederalRate(federalRate, grossPay);
+       
+       
+       double finalStateRate = payrollHelper.calculateStateRate (stateTaxRate, grossPay);
+       
+       double totalDeductions = payrollHelper.calculateDeductions(finalFederalRate, finalStateRate);
+       
        NumberFormat currency = NumberFormat.getCurrencyInstance();
        NumberFormat percent = NumberFormat.getPercentInstance();
        
-       double finalStateRate = stateTaxRate * grossPay;
-       
-       double totalDeductions = finalFederalRate + finalStateRate;
-       
-       double netPay = grossPay - totalDeductions;
+       double netPay = payrollHelper.calculateNetPay(grossPay, totalDeductions);
        
        
        System.out.println();
@@ -83,9 +87,7 @@ public class Payroll
        
        System.out.println();
        System.out.println("Net Pay:" + netPay);
-       
-               
-       
                
     }
+
 }
